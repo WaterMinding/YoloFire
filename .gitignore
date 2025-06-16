@@ -1,5 +1,5 @@
 # 忽略所有日志文件
-yolo/logs/**/*.log
+**/*.log
 
 # 忽略部分数据集文件
 yolo/dataset/train/
@@ -11,3 +11,6 @@ yolo/runs/
 
 # 忽略weights目录
 yolo/weights/
+
+# 忽略所有的pycache
+**/__pycache__/
