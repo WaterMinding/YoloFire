@@ -1,0 +1,23 @@
+# 禁用非极大值抑制
+no_nms: false
+
+# 启用半精度
+half: false
+
+# 启用int8量化
+int8: false
+
+# 输入批次数
+batch: 1
+
+# 输入图像边长
+imgsz: 640
+
+# onnx模型opset版本
+opset: 11
+
+# 导出使用的设备
+device: "cuda"
+
+# 是否简化onnx模型
+simplify: false
