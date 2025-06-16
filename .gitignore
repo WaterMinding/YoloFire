@@ -1,0 +1,13 @@
+# 忽略所有日志文件
+yolo/logs/**/*.log
+
+# 忽略部分数据集文件
+yolo/dataset/train/
+yolo/dataset/test/
+yolo/dataset/val/
+
+# 忽略runs目录
+yolo/runs/
+
+# 忽略weights目录
+yolo/weights/
