@@ -4,6 +4,7 @@ import shutil
 import logging
 import argparse
 from pathlib import Path
+from copy import deepcopy
 from logging import Logger
 from argparse import Namespace
 
@@ -36,13 +37,13 @@ def yolo2onnx(args: Namespace, logger: Logger) -> Path:
     """
 
     # 获取待转换模型路径
-    try: 
+    if args.model:
 
         model_name = args.model
 
-    except AttributeError as e:
+    else:
         
-        logger.error(f'缺少参数 --model {e}')
+        logger.error(f'缺少参数 --model')
         return None
 
     if isinstance(model_name, Path) and model_name.is_absolute():
@@ -60,8 +61,6 @@ def yolo2onnx(args: Namespace, logger: Logger) -> Path:
     logger.info(f'正在将 {model_name} 导出为 ONNX 格式...')
     
     onnx_path = ONNX_DIR / f'{model_path.stem}.onnx'
-
-    breakpoint()
     
     try:
 
@@ -148,7 +147,7 @@ def merge_args(args: Namespace, logger: Logger) -> Namespace:
         Namespace: 合并后的参数
     """
 
-    merged_args = Namespace()
+    merged_args = deepcopy(args)
 
     # 合并配置文件参数（低优先级）
     if args.yaml is not None:
@@ -167,7 +166,10 @@ def merge_args(args: Namespace, logger: Logger) -> Namespace:
 
         for key, value in yaml_args.items():
 
-            setattr(merged_args, key, value)
+            # 防止配置文件混入错误参数
+            if hasattr(args, key):
+
+                setattr(merged_args, key, value)
     
     else:
 
@@ -203,8 +205,7 @@ if __name__ == '__main__':
     )
 
     args = parse_args()
-    
+
     args = merge_args(args = args, logger = logger)
 
     onnx_path = yolo2onnx(args = args, logger = logger)
-
