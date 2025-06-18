@@ -61,10 +61,6 @@ def prepare_dataset(logger: logging.Logger) -> bool:
         # 记录配置文件内容
         with open(config_path, "r", encoding="utf-8") as f:
             config_content = f.read()
-        logger.info("配置文件内容预览:")
-        logger.info("-" * 80)
-        logger.info(config_content)
-        logger.info("-" * 80)
 
         return True
     except Exception as e:
