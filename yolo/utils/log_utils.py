@@ -77,7 +77,7 @@ def log_dict(logger: logging.Logger, title: str, data: dict) -> None:
                 logger.info(f"{indent_str}{key}:")
                 for i, item in enumerate(value):
                     if isinstance(item, dict):
-                        logger.info(f"{indent_str}  - 条目 #{i + 1}:")
+                        logger.info(f"{indent_str}  - {i + 1}:")
                         _log_dict_content(item, indent + 2)
                     else:
                         logger.info(f"{indent_str}  - {item}")
@@ -87,9 +87,9 @@ def log_dict(logger: logging.Logger, title: str, data: dict) -> None:
                 # 格式化列表为可读字符串
                 if isinstance(value, list):
                     value_str = ', '.join(map(str, value))
-                    logger.info(f"{indent_str}{key}: [{value_str}]")
+                    logger.info(f"{indent_str}{key:<22}: [{value_str}]")
                 else:
-                    logger.info(f"{indent_str}{key}: {value}")
+                    logger.info(f"{indent_str}{key:<22}: {value}")
 
     # 开始处理字典内容
     _log_dict_content(data)
