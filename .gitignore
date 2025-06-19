@@ -19,5 +19,10 @@ yolo/weights/
 .vscode/
 .idea/
 
-# 忽略含有绝对路径的数据配置文件
+# 忽略含有绝对路径的配置文件
 yolo/configs/data.yaml
+yolo/configs/train.yaml
+yolo/configs/val.yaml
+
+# 忽略所有权重文件
+**/*.pt
