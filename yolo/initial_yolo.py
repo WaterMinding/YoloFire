@@ -15,6 +15,7 @@ from utils.paths import (
     SCRIPTS_DIR,
     WEIGHTS_DIR,
     ONNX_DIR,
+    ENGINE_DIR,
     CHECKPOINTS_DIR,
     PRETRAINED_DIR,
     LOGGING_DIR
@@ -48,6 +49,7 @@ def initialize_yolo_directories() -> None:
         RUNS_DIR,
         WEIGHTS_DIR,
         ONNX_DIR,
+        ENGINE_DIR,
         CHECKPOINTS_DIR,
         PRETRAINED_DIR,
         RAW_IMAGES_DIR,

@@ -33,6 +33,7 @@ SCRIPTS_DIR = YOLO_DIR / "scripts"
 WEIGHTS_DIR = YOLO_DIR / "weights"
 
 ONNX_DIR = WEIGHTS_DIR / "onnx"
+ENGINE_DIR = WEIGHTS_DIR / "engine"
 CHECKPOINTS_DIR = WEIGHTS_DIR / "checkpoints"
 PRETRAINED_DIR = WEIGHTS_DIR / "pretrained"
 
