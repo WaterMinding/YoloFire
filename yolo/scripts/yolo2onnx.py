@@ -9,6 +9,7 @@ from logging import Logger
 from argparse import Namespace
 
 import numpy as np
+import tensorrt as trt
 import onnxruntime as ort
 from ultralytics import YOLO
 
@@ -19,7 +20,7 @@ if not str(yolo_path) in sys.path:
 
 from utils import setup_logger, log_dict
 from utils import CONFIGS_DIR, LOGGING_DIR
-from utils import CHECKPOINTS_DIR, ONNX_DIR
+from utils import CHECKPOINTS_DIR, ONNX_DIR, ENGINE_DIR
 
 
 def yolo2onnx(args: Namespace, logger: Logger) -> Path:
@@ -113,7 +114,61 @@ def yolo2onnx(args: Namespace, logger: Logger) -> Path:
 
     return onnx_path
 
+def onnx2engine(
+    onnx_name: Path, 
+    engine_name: Path,
+    logger: Logger
+) -> Path:
+    
+    onnx_file_path = ONNX_DIR / onnx_name
 
+    engine_file_path = ENGINE_DIR / engine_name
+
+    if onnx_file_path.exists() is False:
+
+        logger.error(f'ONNX模型文件不存在: {onnx_file_path}')
+
+        return None
+
+    trt_logger = trt.Logger(trt.Logger.INFO)
+
+    with trt.Builder(trt_logger) as builder:
+        
+        # 创建网络定义
+        logger.info('正在创建网络定义...')
+        explicit_batch = 1 << \
+            int(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH)
+        network = builder.create_network(explicit_batch)
+        
+        # 解析 ONNX 模型
+        logger.info('正在解析ONNX...')
+        parser = trt.OnnxParser(network, trt_logger)
+        with open(onnx_file_path, 'rb') as model:
+            if not parser.parse(model.read()):
+                for error in range(parser.num_errors):
+                    print(parser.get_error(error))
+                return None
+
+        # 设置构建参数
+        config = builder.create_builder_config()
+        config.set_memory_pool_limit(
+            trt.MemoryPoolType.WORKSPACE, 1 << 30
+        )
+
+        # 构建引擎
+        logger.info('正在构建TensorRT引擎...')
+        engine = builder.build_serialized_network(network, config)
+
+        # 保存引擎文件
+        logger.info('正在保存TensorRT引擎文件...')
+        if engine:
+            with open(engine_file_path, "wb") as f:
+                f.write(engine)
+        
+        logger.info('TensorRT Engine 构造完成！')
+        logger.info(f"TensorRT引擎文件已经保存至: {engine_file_path}")
+
+    
 def parse_args() -> Namespace:
 
     parser = argparse.ArgumentParser()
@@ -128,7 +183,8 @@ def parse_args() -> Namespace:
     add_argument('--imgsz', type = int, default = 640, help = '输入尺寸')
     add_argument('--opset', type = int, default = 11, help = 'opset版本')
     add_argument('--device', type = str, default = 'cpu', help = '设备类型')
-
+    
+    add_argument('--trt', action = 'store_true', help = '构造TensorRT引擎')
     add_argument('--yaml', type = str, default = 'onnx.yaml', help='配置文件名')
 
     return parser.parse_args()
@@ -209,3 +265,11 @@ if __name__ == '__main__':
     args = merge_args(args = args, logger = logger)
 
     onnx_path = yolo2onnx(args = args, logger = logger)
+    
+    if args.trt and onnx_path is not None:
+        
+        onnx2engine(
+            onnx_name = onnx_path,
+            engine_name = onnx_path.stem + '.engine',
+            logger = logger
+        )

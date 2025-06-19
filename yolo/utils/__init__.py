@@ -8,6 +8,7 @@ from .paths import (
     CHECKPOINTS_DIR,
     PRETRAINED_DIR,
     ONNX_DIR,
+    ENGINE_DIR,
     LOGGING_DIR,
     RAW_DATA_DIR,
     RAW_IMAGES_DIR,

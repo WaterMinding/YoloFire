@@ -21,3 +21,6 @@ device: "cuda"
 
 # 是否简化onnx模型
 simplify: false
+
+# 是否构造TensorRT引擎
+trt: false
