@@ -65,13 +65,14 @@ class FireInference:
 
         # 调用美化函数
         from beautify import custom_plot
+        from beautify import BASE_FONT_PATH
         beautified_frame = custom_plot(
             frame,
             boxes=boxes,
             confs=confs,
             labels=labels,
             use_chinese_mapping=False,  # 使用英文标签
-            font_path=r"/LXGWWenKai-Bold.ttf",
+            font_path=BASE_FONT_PATH,
             font_size=20,
             line_width=4,
             label_padding_x=10,
@@ -89,7 +90,8 @@ class FireInference:
 
     def process_image(self, image_path, conf):
         """处理图像文件并返回检测过后带框的图像"""
-        img = cv2.imread(image_path)
+        img = np.fromfile(image_path, np.uint8)
+        img = cv2.imdecode(img, cv2.IMREAD_UNCHANGED)
         if img is None:
             print(f"无法读取图像文件：{image_path}")
             return None

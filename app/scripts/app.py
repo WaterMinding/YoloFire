@@ -4,22 +4,26 @@
 # @Time: 2025/6/17 22:15
 # @Project: SafeH
 # @Function:
-import threading
-import time
-from datetime import datetime
-
-import numpy as np
-
-import sys
 import os
+import sys
+import time
+import threading
+from pathlib import Path
+
 import cv2
-from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
+import numpy as np
+from pytts import init_tts
 from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer
+from PyQt6.QtWidgets import QComboBox
+from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import QFileDialog, QMessageBox
+
+from paths import LOGS_DIR
+from paths import MODELS_DIR
 from infer import FireInference
-from yolofire_ui import Ui_MainWindow
-from pytts import init_tts
 from logger import setup_logger
+from yolofire_ui import Ui_MainWindow
 
 
 
@@ -134,12 +138,25 @@ class MainWindow(QMainWindow):
         self.alarm_lock = threading.Lock()
         self.is_alarm_active = False
 
+        # 初始化模型菜单
+        self.ui.select_model_path.addItems(["None"])
+
+        model_names = list(MODELS_DIR.glob("*.onnx"))
+        
+        self.ui.select_model_path.addItems([
+            model.stem for model in model_names
+        ])
+
+        self.ui.select_model_path.setCurrentText("None")
+
+        self.ui.model_path.setText('None')
+
         # 初始化变量
-        self.log_dir = "../logs"
-        self.model_path = ""  # 模型路径
-        self.data_path = ""  # 数据路径
-        self.confidence_threshold = 0.5  # 置信度初值
+        self.log_dir = LOGS_DIR
+        self.model_path = None
         self.model = None
+        self.data_path = ""  # 数据路径
+        self.confidence_threshold = 0.7  # 置信度初值
         self.video_thread = None
         self.output_frame_list = []  # 保存视频文件输出的帧列表，用于将结果重新保存为视频文件
         self.ui.IOU.setText("帧率:")
@@ -148,13 +165,12 @@ class MainWindow(QMainWindow):
         self.frame_count = 0
         self.logger = setup_logger(self.log_dir)
         # 设置初始值
-        self.ui.model_path.setText(self.model_path)
         self.ui.data_path.setText(self.data_path)
         self.ui.belief_value.setText(f"{self.confidence_threshold:.2f}")
         self.fps_value.setText(f"{self.fps:.2f}")
 
         # 连接信号和槽
-        self.ui.select_model_path.clicked.connect(self.select_model)
+        self.ui.select_model_path.currentIndexChanged.connect(self.select_model)
         self.ui.select_data_path.clicked.connect(self.select_data)
         self.ui.start_button.clicked.connect(self.start_detection)
         self.ui.stop_button.clicked.connect(self.stop_detection)
@@ -177,15 +193,26 @@ class MainWindow(QMainWindow):
         选择模型路径
         :return:
         """
-        options = QFileDialog.Option.DontUseNativeDialog
-        last_model_path = self.model_path
-        self.model_path, _ = QFileDialog.getOpenFileName(
-            self, "选择模型文件", "", "ONNX Files (*.onnx)", options=options)
-        if self.model_path == "":
-            self.model_path = last_model_path
+        model_stem = self.ui.select_model_path.currentText()
+
+        if model_stem == 'None':
+
+            self.model = None
+            self.model_path = None
+            self.ui.model_path.setText("None")
+
+            self.logger.info(f"未选择模型")
+        
+        else:
+
+            model_path = Path(
+                MODELS_DIR / (model_stem + ".onnx")
+            )
+            self.model_path = str(model_path.relative_to(Path.cwd()))
+
         if self.model_path:
-            self.ui.model_path.setText(self.model_path)
             self.model = FireInference(self.model_path)
+            self.ui.model_path.setText(str(model_path))
             self.logger.info(f"模型路径已设置为：{self.model_path}")
 
 
@@ -392,9 +419,9 @@ class MainWindow(QMainWindow):
                 self.video_thread.show_processed = True
                 self.logger.info(f"继续摄像头检测")
             else:
+                self.logger.info(f"开始摄像头检测")
                 self.open_camera()
                 self.output_frame_list.clear()
-                self.logger.info(f"开始摄像头检测")
                 # 清除之前的信息
                 self.ui.text_information.clear()
                 self.video_thread.show_processed = True
@@ -412,6 +439,7 @@ class MainWindow(QMainWindow):
                 self.video_timer.start(10)  # 约100帧每秒
         else:  # 检测图片
             # 清除之前的信息
+            self.logger.info(f"开始图片检测")
             self.ui.text_information.clear()
             processed_img_ndarray, result = self.model.process_image(self.data_path, self.confidence_threshold)
             processed_img = numpy_to_qpixmap(processed_img_ndarray)
@@ -427,7 +455,6 @@ class MainWindow(QMainWindow):
                     self.hassmog = True
 
             self.manage_alarms()
-            self.logger.info(f"开始图片检测")
             self.ui.result_data.setPixmap(scaled_processed_img)
 
     def stop_detection(self):
@@ -555,6 +582,7 @@ class MainWindow(QMainWindow):
             class_name = class_names.get(int(class_id), "unknown")
             info = f"检测到类别: {class_name}, 置信度: {score:.2f}, 位置: ({x1:.2f}, {y1:.2f}) -> ({x2:.2f}, {y2:.2f})"
             self.ui.text_information.appendPlainText(info)
+            self.logger.info(info)
 
         # 滚动到最新信息
         self.ui.text_information.ensureCursorVisible()
@@ -564,11 +592,17 @@ class MainWindow(QMainWindow):
         if not self.is_alarm_active:
             if self.hasflame:
                 self.is_alarm_active = True
-                self.alarm_thread = threading.Thread(target=self.alarm_frame_tts)
+                self.alarm_thread = threading.Thread(
+                    target = self.alarm_frame_tts,
+                    daemon = True
+                )
                 self.alarm_thread.start()
             elif self.hassmog and not self.hasflame:
                 self.is_alarm_active = True
-                self.alarm_thread = threading.Thread(target=self.alarm_smog_tts)
+                self.alarm_thread = threading.Thread(
+                    target = self.alarm_smog_tts,
+                    daemon = True
+                )
                 self.alarm_thread.start()
 
 
@@ -624,6 +658,8 @@ class MainWindow(QMainWindow):
             self.frame_count = 0
             self.last_fps_time = current_time
             self.fps_value.setText(f"{self.fps:.2f}")
+    
+    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

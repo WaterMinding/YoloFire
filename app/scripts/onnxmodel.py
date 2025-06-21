@@ -40,11 +40,13 @@ class ONNXModel:
             )
         
         # print('providers: ', providers)
-
-        self.session = onnxrt.InferenceSession(
-            model_path, 
-            providers = providers
-        )
+        try:
+            self.session = onnxrt.InferenceSession(
+                model_path, 
+                providers = providers
+            )
+        except Exception as e:
+            raise e
 
     # 推理方法
     def inference(self, inp: ndarray, conf: float = 0.25) -> ndarray:

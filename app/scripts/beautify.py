@@ -9,10 +9,11 @@ from PIL import Image, ImageDraw, ImageFont
 import cv2
 import numpy as np
 from collections import OrderedDict
+from paths import RESOURCE_DIR
 
 # ======================= 全局配置（基础值，作为内部默认和参考） ==========================
 # 注意：这些是“基准”值，如果用户没有通过CLI/YAML提供，将使用这些默认值
-BASE_FONT_PATH = r"/LXGWWenKai-Bold.ttf"
+BASE_FONT_PATH = RESOURCE_DIR / "LXGWWenKai-Bold.ttf"
 BASE_FONT_SIZE = 20  # 默认字体大小（针对 REF_DIM 720p 的基准）
 BASE_LINE_WIDTH = 4  # 默认线宽
 BASE_LABEL_PADDING = (10, 10)  # 默认标签内边距（水平，垂直）

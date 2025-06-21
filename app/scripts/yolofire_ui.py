@@ -9,6 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtMultimediaWidgets import QVideoWidget
 from PyQt6.QtWidgets import QVBoxLayout
+from paths import RESOURCE_DIR
 
 
 class Ui_MainWindow(object):
@@ -71,7 +72,7 @@ class Ui_MainWindow(object):
         self.label.setSizePolicy(sizePolicy)
         self.label.setMaximumSize(QtCore.QSize(200, 256))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("D:\\生产实习-火灾检测\\界面UI\\../../浏览器下载/更多萌宠.png"))
+        self.label.setPixmap(QtGui.QPixmap(str(RESOURCE_DIR / "乌龟.png")))
         self.label.setObjectName("label")
         self.top_layout.addWidget(self.label)
         self.result_data = QtWidgets.QLabel(parent=self.centralwidget)
@@ -97,7 +98,7 @@ class Ui_MainWindow(object):
         self.mid_layout.setObjectName("mid_layout")
         self.select_layout = QtWidgets.QVBoxLayout()
         self.select_layout.setObjectName("select_layout")
-        self.select_model_path = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.select_model_path = QtWidgets.QComboBox(parent=self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Maximum, QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -111,9 +112,12 @@ class Ui_MainWindow(object):
 "        padding: 5px;\n"
 "}")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("D:\\生产实习-火灾检测\\界面UI\\../../浏览器下载/柴犬.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
-        self.select_model_path.setIcon(icon)
+        icon.addPixmap(QtGui.QPixmap(str(RESOURCE_DIR / "柴犬.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.select_model_path.setObjectName("select_model_path")
+        self.select_model_path.setStyleSheet("background-color : white;\n"
+"        border : 1px solid #cccccc;\n"
+"        border-radius : 5px;\n"
+"        padding: 5px;")
         self.select_layout.addWidget(self.select_model_path)
         self.model_path = QtWidgets.QTextEdit(parent=self.centralwidget)
         self.model_path.setMaximumSize(QtCore.QSize(16777215, 41))
@@ -153,7 +157,7 @@ class Ui_MainWindow(object):
 "        padding: 5px;\n"
 "}")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("D:\\生产实习-火灾检测\\界面UI\\../../浏览器下载/哈士奇.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon1.addPixmap(QtGui.QPixmap(str(RESOURCE_DIR/"哈士奇.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.select_data_path.setIcon(icon1)
         self.select_data_path.setObjectName("select_data_path")
         self.select_layout.addWidget(self.select_data_path)
@@ -184,7 +188,7 @@ class Ui_MainWindow(object):
 "        padding: 5px;\n"
 "}")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("D:\\生产实习-火灾检测\\界面UI\\../../浏览器下载/仓鼠.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon2.addPixmap(QtGui.QPixmap(str(RESOURCE_DIR / "仓鼠.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.belief.setIcon(icon2)
         self.belief.setObjectName("belief")
         self.parameter_layout.addWidget(self.belief)
@@ -219,7 +223,7 @@ class Ui_MainWindow(object):
 "        padding: 5px;\n"
 "}")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("D:\\生产实习-火灾检测\\界面UI\\../../浏览器下载/边牧.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon3.addPixmap(QtGui.QPixmap(str(RESOURCE_DIR / "边牧.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.IOU.setIcon(icon3)
         self.IOU.setObjectName("IOU")
         self.parameter_layout.addWidget(self.IOU)
@@ -307,7 +311,7 @@ class Ui_MainWindow(object):
 "        padding: 5px;\n"
 "}")
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("D:\\生产实习-火灾检测\\界面UI\\../../浏览器下载/可达鸭.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon4.addPixmap(QtGui.QPixmap(str(RESOURCE_DIR / "可达鸭.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.start_button.setIcon(icon4)
         self.start_button.setObjectName("start_button")
         self.behind_layout.addWidget(self.start_button)
@@ -325,7 +329,7 @@ class Ui_MainWindow(object):
 "        padding: 5px;\n"
 "}")
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("D:\\生产实习-火灾检测\\界面UI\\../../浏览器下载/三花猫.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon5.addPixmap(QtGui.QPixmap(str(RESOURCE_DIR / "三花猫.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.stop_button.setIcon(icon5)
         self.stop_button.setObjectName("stop_button")
         self.behind_layout.addWidget(self.stop_button)
@@ -343,7 +347,7 @@ class Ui_MainWindow(object):
 "        padding: 5px;\n"
 "}")
         icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap("D:\\生产实习-火灾检测\\界面UI\\../../浏览器下载/布偶猫.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon6.addPixmap(QtGui.QPixmap(str(RESOURCE_DIR / "布偶猫.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.end_button.setIcon(icon6)
         self.end_button.setObjectName("end_button")
         self.behind_layout.addWidget(self.end_button)
@@ -361,7 +365,7 @@ class Ui_MainWindow(object):
 "        padding: 5px;\n"
 "}")
         icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap("D:\\生产实习-火灾检测\\界面UI\\../../浏览器下载/暹罗猫.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon7.addPixmap(QtGui.QPixmap(str(RESOURCE_DIR / "暹罗猫.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.save_button.setIcon(icon7)
         self.save_button.setObjectName("save_button")
         self.behind_layout.addWidget(self.save_button)
@@ -379,7 +383,7 @@ class Ui_MainWindow(object):
 "        padding: 5px;\n"
 "}")
         icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap("D:\\生产实习-火灾检测\\界面UI\\../../浏览器下载/田园犬.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon8.addPixmap(QtGui.QPixmap(str(RESOURCE_DIR / "田园犬.png")), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.log_button.setIcon(icon8)
         self.log_button.setObjectName("log_button")
         self.behind_layout.addWidget(self.log_button)
@@ -398,7 +402,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.source_data.setText(_translate("MainWindow", "原始数据"))
         self.result_data.setText(_translate("MainWindow", "检测结果"))
-        self.select_model_path.setText(_translate("MainWindow", "选择模型路径："))
         self.data_class.setItemText(0, _translate("MainWindow", "图片"))
         self.data_class.setItemText(1, _translate("MainWindow", "视频"))
         self.data_class.setItemText(2, _translate("MainWindow", "摄像头"))
