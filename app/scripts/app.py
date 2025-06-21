@@ -21,6 +21,9 @@ from PyQt6.QtWidgets import QFileDialog, QMessageBox
 
 from paths import LOGS_DIR
 from paths import MODELS_DIR
+from paths import IMAGE_RESULT_DIR
+from paths import VIDEO_RESULT_DIR
+from paths import CAMERA_RESULT_DIR
 from infer import FireInference
 from logger import setup_logger
 from yolofire_ui import Ui_MainWindow
@@ -496,7 +499,7 @@ class MainWindow(QMainWindow):
                 return
             options = QFileDialog.Option.DontUseNativeDialog
             file_path, _ = QFileDialog.getSaveFileName(
-                self, "保存结果图片", "", "Images (*.png *.xpm *.jpg)", options=options)
+                self, "保存结果图片", str(IMAGE_RESULT_DIR), "Images (*.png *.xpm *.jpg)", options=options)
             if file_path:
                 # 确保文件有扩展名
                 if not file_path.lower().endswith(('.png', '.jpg', '.jpeg', '.xpm')):
@@ -508,11 +511,11 @@ class MainWindow(QMainWindow):
 
         elif self.ui.data_class.currentText() == "视频":
             self.end_detection()
-            self.save_frames_to_video(self.output_frame_list)
+            self.save_frames_to_video(self.output_frame_list, str(VIDEO_RESULT_DIR))
 
         elif self.ui.data_class.currentText() == "摄像头":
             self.end_detection()
-            self.save_frames_to_video(self.output_frame_list)
+            self.save_frames_to_video(self.output_frame_list, str(CAMERA_RESULT_DIR))
 
     def qPixmap_to_numpy(self, qPixmap):
         # 将 QPixmap 转换为 QImage
@@ -529,7 +532,7 @@ class MainWindow(QMainWindow):
         # image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
         return image
-    def save_frames_to_video(self, processed_frames, fps=30):
+    def save_frames_to_video(self, processed_frames, save_path, fps=30):
         """
         将处理后的帧保存为视频文件
 
