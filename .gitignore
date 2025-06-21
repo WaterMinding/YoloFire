@@ -1,0 +1,33 @@
+# 忽略所有日志文件
+**/*.log
+
+# 忽略部分数据集文件
+yolo/dataset/train/
+yolo/dataset/test/
+yolo/dataset/val/
+
+# 忽略runs目录
+yolo/runs/
+
+# 忽略weights目录
+yolo/weights/
+
+# 忽略所有的pycache
+**/__pycache__/
+
+# 忽略编辑器或IDE的配置文件
+.vscode/
+.idea/
+
+# 忽略含有绝对路径的配置文件
+yolo/configs/data.yaml
+yolo/configs/train.yaml
+yolo/configs/val.yaml
+
+# 忽略所有权重文件
+**/*.pt
+
+# 忽略app/下无上传必要目录
+app/logs/
+app/models/
+app/result/
