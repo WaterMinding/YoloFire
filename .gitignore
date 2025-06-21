@@ -27,6 +27,7 @@ yolo/configs/val.yaml
 # 忽略所有权重文件
 **/*.pt
 
-# 忽略所有视频、图像文件
-**/*.jpg
-**/*.mp4
+# 忽略app/下无上传必要目录
+app/logs/
+app/models/
+app/result/
