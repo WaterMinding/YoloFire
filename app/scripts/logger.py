@@ -2,7 +2,7 @@
 # @FileName: logger.py
 # @Author: BLC
 # @Time: 2025/6/20 00:02
-# @Project: SafeH
+# @Project: YoloFire
 # @Function:
 import logging
 import os
@@ -22,7 +22,7 @@ def setup_logger(log_dir, encoding="utf-8"):
     log_file = os.path.join(log_dir, f"app_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
 
     # 配置日志记录器
-    logger = logging.getLogger("SafeH")
+    logger = logging.getLogger("YoloFire")
     logger.setLevel(logging.INFO)
 
     # 避免重复添加处理器

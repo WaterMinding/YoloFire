@@ -3,7 +3,7 @@
 # @FileName  :model_utils.py
 # @Time      :2025/6/13 11:24:24
 # @Author    :雨霓同学
-# @Project   :SafeH
+# @Project   :YoloFire
 # @Function  :用于将训练好的模型拷贝到模型存储目录
 
 from datetime import datetime

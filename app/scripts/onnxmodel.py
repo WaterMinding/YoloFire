@@ -79,43 +79,4 @@ class ONNXModel:
         return anchors
 
 
-if __name__ == '__main__':
-
-    import time
-
-
-    start = time.time()
-    model = ONNXModel(
-        model_path = Path(r'/SafeUI/test.onnx'),
-        input_size = (1, 3, 640, 640),
-        use_trt = True,
-    )
-    print('load time:', time.time() - start)
-
-    import cv2
-
-    imgx = cv2.imread(r'D:\SafeH\fire_data\VCG211519899462.jpg')
-
-
-    img = cv2.cvtColor(imgx, cv2.COLOR_BGR2RGB)
-
-    img = cv2.resize(img, (640, 640))
-
-    img = img.transpose(2, 0, 1)
-
-    img = (np.expand_dims(img, 0) / 255.0).astype(np.float32)
-
-    
-    for i in range(1):
-        start = time.time()
-        result = model.inference(img)
-        print(time.time() - start)
-    
-    # 绘制结果
-    for i in range(result.shape[0]):
-        x1, y1, x2, y2, conf, clss = result[i]
-        x1, y1, x2, y2 = int(x1 * imgx.shape[1]), int(y1 * imgx.shape[0]), int(x2 * imgx.shape[1]), int(y2 * imgx.shape[0])
-        cv2.rectangle(imgx, (x1, y1), (x2, y2), (0, 255, 0), 2)
-    cv2.imshow('img', imgx)
-    cv2.waitKey(0)
     

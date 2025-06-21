@@ -2,7 +2,7 @@
 # @FileName: pytts.py
 # @Author: BLC
 # @Time: 2025/6/16 15:20
-# @Project: SafeH
+# @Project: YoloFire
 # @Function: 语音功能
 import pyttsx3
 import time

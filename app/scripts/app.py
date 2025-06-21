@@ -2,7 +2,7 @@
 # @FileName: app.py
 # @Author: BLC
 # @Time: 2025/6/17 22:15
-# @Project: SafeH
+# @Project: YoloFire
 # @Function:
 import os
 import sys

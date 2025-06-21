@@ -2,7 +2,7 @@
 # @FileName: inference_main.py
 # @Author  : BLC
 # @Time    : 2025/6/19 14:32
-# @Project : SafeH
+# @Project : YoloFire
 # @Function: 推理代码，调用onnxmodel类中的函数对数据进行推理并返回结果
 import cv2
 import numpy as np

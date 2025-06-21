@@ -3,7 +3,7 @@
 # @FileName  :config_utils.py
 # @Time      :2025/6/12 11:20:19
 # @Author    :雨霓同学
-# @Project   :SafeH
+# @Project   :YoloFire
 # @Function  :提供配置文件操作工具
 from pathlib import  Path
 import sys

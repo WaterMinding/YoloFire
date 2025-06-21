@@ -2,7 +2,7 @@
 # @FileName: infer.py
 # @Author: BLC
 # @Time: 2025/6/19 15:15
-# @Project: SafeH
+# @Project: YoloFire
 # @Function:
 import cv2
 import numpy as np

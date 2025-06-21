@@ -3,7 +3,7 @@
 # @FileName :yolo_train.py
 # @Time     :2025/6/12 15:25:42
 # @Author   :雨霓同学
-# @Project  :SafeH
+# @Project  :YoloFire
 # @Function :训练脚本入口, 集成utils模块
 import sys
 from pathlib import Path
